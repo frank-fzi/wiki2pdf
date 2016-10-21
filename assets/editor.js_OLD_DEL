@@ -1,0 +1,119 @@
+
+function EditorCanvas (width, height, pic, noOfPages, pages){
+	this.editor = this;
+	this.width = $('#scroll').width();
+	this.height = $('#scroll').height();
+	console.log("Width:" + this.width + "; Height:" + this.height);
+	this.noOfPages = noOfPages;
+	this.actPage = 1;
+	this.actScale = 1;
+	this.pages = pages;
+	this.elements = new Array();
+	this.canvas = document.getElementById("canvas");
+	this.context = this.canvas.getContext("2d");
+	document.getElementById("scroll").style.overflow = "scroll";
+	this.canvas.width = this.width;
+	this.canvas.height = this.height;
+	
+	this.pic = new Image();
+	this.pic.onload = function () {
+		editor.canvas.height = editor.pic.height;
+		editor.canvas.width = editor.pic.width;
+	    editor.draw();
+	   
+	};
+	this.pic.src = pic;
+	
+	
+	this.canvas.addEventListener('click', function(evt) {
+		var varname = prompt("Bitte Variablennamen eingeben", "Name");
+		var mousePos = editor.getMousePos(editor.canvas, evt);
+		var element = [];
+		element["page"] = editor.actPage;
+		element["x"] = mousePos.x;
+		element["y"] = mousePos.y;
+		element["x_calc"] = Math.round((mousePos.x/editor.width)*210);
+		element["y_calc"] = Math.round((mousePos.y/editor.height)*297)+3;
+		console.log("Calc X: " + "(" + mousePos.x + "/" + editor.width + ")*210 = " + element["x_calc"]);
+		console.log("Calc Y: " + "(" + mousePos.y + "/" + editor.height + ")*297+3 = " + element["y_calc"]);
+		console.log("X:" + element["x"] + "| Y:" + element["y"]);
+		element["varname"] = varname;
+		
+		editor.addElement(element["x_calc"], element["y_calc"], editor.actPage, element["varname"]);
+		editor.draw();
+	}, false);
+	
+	this.getMousePos = function(canvas, evt) {
+		var rect = canvas.getBoundingClientRect();
+		return {
+			x: evt.clientX - rect.left,
+			y: evt.clientY - rect.top
+		};
+	};
+	
+	
+	
+	
+	
+	this.zoomIn = function(){
+		editor.actScale += 0.1;
+		editor.draw();
+	};
+	
+	this.zoomOut = function(){
+		editor.actScale -= 0.1;
+		editor.draw();
+	};
+
+	this.addElement = function(x, y, page, content){
+		this.elements.push({"x": x,
+							"y": y,
+							"page": page,
+							"varname": content,
+		});
+	};
+	
+	this.renderExport = function(){
+		
+		var exporttext = '<smwpdfexport template="##url##">';
+		exporttext += '[';
+		$.each(this.elements, function( k, v ) {
+			exporttext += '"String;' + v['page'] + ';' + v['x_calc'] + ';' +  v['y_calc'] + ';{{{' + v['varname'] + '}}}"';
+			
+			if(k < elements.length-1){
+				exporttext += ",";
+			}
+		});
+		exporttext += ']';
+		exporttext += '</smwpdfexport>';
+
+
+
+
+		$("#TfExport").val(exporttext);
+		
+		
+	};
+	
+	this.draw = function(){
+		this.context = this.canvas.getContext("2d");
+		this.context.scale(editor.actScale, editor.actScale);
+		
+	    this.context.clearRect(0, 0, editor.canvas.width, editor.canvas.height);
+	    this.context.drawImage(editor.pic, 0, 0, editor.pic.width, editor.pic.height);
+
+	    this.context.font="25px Georgia";
+	    
+		$.each(this.elements, function( k, v ) {
+			editor.context.fillText(v['varname'], v['x'], v['y']);
+		});
+	};
+	
+}
+
+
+
+
+
+
+

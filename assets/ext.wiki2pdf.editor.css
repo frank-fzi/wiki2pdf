@@ -1,0 +1,67 @@
+#canvas {
+    border: 1px solid black;
+}
+#scroll {
+	width: 100%;
+	height: 70vh;
+    overflow:scroll;
+    border: solid 1px white;
+    background-color:white;
+}
+
+.tabelement{
+
+	width: 100%;
+}
+
+textarea{
+	font-size: x-large;			
+}
+
+.hidden{
+	display: none;
+}
+
+#text-controls{
+	position: absolute;
+	top: 160px;
+	left: 600px;
+}
+
+
+#bool-controls{
+	position: absolute;
+	top: 460px;
+	left: 600px;
+}
+
+.controlwindow{
+    border: 1px dotted #444;
+    padding: 10px;
+    background: rgba(244, 244, 244, 0.5);
+}
+
+.controlwindow:hover {
+	background: rgba(244, 244, 244, 1);
+}
+
+#exmplYes{
+	width: 60px;
+	height: 60px;
+	background: #5F925F;
+}
+
+
+#exmplNo{
+	width: 60px;
+	height: 60px;
+	background: #7E4848;
+}
+
+.exmplContainer{
+	width: 180px;
+}
+
+.exmplContainerSection{
+	margin: 10px;
+}
